@@ -1,6 +1,6 @@
 #include "../include/arguments.h"
 using namespace foxintango;
-
+#include <string.h>
 argument::argument() {}
 argument::~argument() {}
 void argument::echo() {
