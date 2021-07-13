@@ -20,8 +20,9 @@ public:
     bool empty() const;
 };
 class argumentsIMPL;
-class arguments {
+class foxintangoAPI arguments {
 public:
+    std::vector<std::string> standalones;
     std::map<std::string,argument> argumentMap;
 public:
     arguments(const int& count,char** content);
