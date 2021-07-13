@@ -135,9 +135,7 @@ install :
 	rm -rf /usr/local/include/libarguments
 	mkdir  /usr/local/include/libarguments
 	cp  -rf ./include/* /usr/local/include/libarguments
-	cp  -rf ./bin/arguments       /usr/local/bin
-	cp  -rf ./lib/libarguments.so /usr/local/lib
+	cp  -rf ./lib/${TARGET_NAME}  /usr/local/lib
 uninstall : 
 	rm -rf /usr/local/include/libarguments
-	rm -rf /usr/local/bin/arguments
-	rm -rf /usr/local/lib/libarguments.so
+	rm -rf /usr/local/lib/${TARGET_NAME}
