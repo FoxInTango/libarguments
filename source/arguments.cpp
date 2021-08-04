@@ -45,15 +45,20 @@ public:
 };
 
 argument::argument()  { this->impl = new argumentIMPL();  }
+argument::argument(const argument& arg) {
+    this->impl = new argumentIMPL();
+    this->impl->name   = arg.impl->name;
+    this->impl->values = arg.impl->values;
+}
 argument::~argument() { if(this->impl) delete this->impl; }
 
 void argument::echo() {
     if(!this->impl) std::cout << "bad argument." << std::endl;
 
-    std::cout << "name : " << this->impl->name << std::endl;
+    std::cout << "Argument : " << this->impl->name << std::endl;
 
     for(int i = 0;i < this->impl->values.size();i ++) {
-        std::cout << "value AT : " << i << this->impl->values[i] << std::endl;
+        std::cout << "    value AT " << i << " : " << this->impl->values[i] << std::endl;
     }
 }
 
@@ -78,10 +83,11 @@ arguments::arguments(const int& count,char** content) {
         while(i < count) {
             char* param = content[i];
             if('-' == param[0] && strlen(param) > 1) break;
-            std::string arg(&param[1]);
+            std::string arg(&param[0]);
             this->impl->standalones.push_back(arg);
             i ++;
         }
+
         while(i < count) {
             char* param = content[i];
             //std::cout << "parse i : " << i << std::endl;
@@ -111,6 +117,12 @@ arguments::arguments(const int& count,char** content) {
 arguments::~arguments() { if(this->impl) delete this->impl; }
 
 void arguments::echo() {
+    unsigned int index = 0;
+    while(this->impl->standalones.begin() + index !=  this->impl->standalones.end()) {
+        
+        std::cout << "Arguments::Standalones " << index << " : " << this->impl->standalones[index] << std::endl;
+        index ++;
+    }
     auto iter = this->impl->argumentMap.begin();
     while(iter !=  this->impl->argumentMap.end()) {
         (*iter).second.echo();

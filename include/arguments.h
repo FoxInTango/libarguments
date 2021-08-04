@@ -33,6 +33,7 @@ public:
     argumentIMPL* impl;
 public:
     argument();
+    argument(const argument& arg);
    ~argument();
 public:
     void echo();
