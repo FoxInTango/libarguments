@@ -57,13 +57,25 @@ void argument::echo() {
 
     std::cout << "Argument : " << this->impl->name << std::endl;
 
-    for(int i = 0;i < this->impl->values.size();i ++) {
+    for(unsigned int i = 0;i < this->impl->values.size();i ++) {
         std::cout << "    value AT " << i << " : " << this->impl->values[i] << std::endl;
     }
 }
 
 bool argument::empty() const {
     return this->impl ?  this->impl->values.size() : 0;
+}
+
+unsigned int argument::count() const {
+    return this->impl ? this->impl->values.size() : 0;
+}
+
+const char* argument::valueAt(const unsigned int& index) {
+    return this->impl && index < this->impl->values.size() ? this->impl->values.at(index).c_str() : 0;
+}
+
+const char* argument::operator [](const unsigned int& index) {
+    return valueAt(index);
 }
 
 class argumentsIMPL {
@@ -116,6 +128,8 @@ arguments::arguments(const int& count,char** content) {
 
 arguments::~arguments() { if(this->impl) delete this->impl; }
 
+argument INSTANCE_ARGUMENT_EMPTY_DEFAULT;
+
 void arguments::echo() {
     unsigned int index = 0;
     while(this->impl->standalones.begin() + index !=  this->impl->standalones.end()) {
@@ -139,6 +153,19 @@ const argument& arguments::at(const char* name) const {
     if(contain(name)) {
         return this->impl->argumentMap.at(name);
     }
-    return argument();
+    return INSTANCE_ARGUMENT_EMPTY_DEFAULT;;
 }
+
+const char* arguments::at(const unsigned int& index) {
+    return this->impl && index < this->impl->standalones.size() ? this->impl->standalones[index].c_str() : 0;
+}
+
+const argument& arguments::operator [](const char* name) {
+    return at(name);
+}
+
+const char* arguments::operator [](const unsigned int& index) {
+    return at(index);
+}
+
 namespaceEnd

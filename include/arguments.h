@@ -25,8 +25,8 @@
 #define _ARGUMENTS_H_
 #include <libcpp/libcpp.h>
 
+EXTERN_C_BEGIN
 namespace foxintango {
-
 class argumentIMPL;
 class foxintangoAPI argument {
 public:
@@ -38,10 +38,11 @@ public:
 public:
     void echo();
     bool empty() const;
+    unsigned int count() const;
 public:
-    char* valueAt(const unsigned int& index);
+    const char* valueAt(const unsigned int& index);
 public:
-    char* operator [](const unsigned int& index);
+    const char* operator [](const unsigned int& index);
 };
 class argumentsIMPL;
 class foxintangoAPI arguments {
@@ -51,13 +52,14 @@ public:
     arguments(const int& count,char** content);
    ~arguments();
 public:
-    void echo();
-    bool contain(const char* name) const;
+    void  echo();
+    bool  contain(const char* name) const;
     const argument& at(const char* name) const;
+    const char* at(const unsigned int& index);
 public:
     const argument& operator [](const char* name);
-    const argument& operator [](const unsigned int& index);
+    const char*     operator [](const unsigned int& index);
 };
 }
-
+EXTERN_C_END
 #endif
