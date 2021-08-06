@@ -56,6 +56,8 @@ public:
     bool  contain(const char* name) const;
     const argument& at(const char* name) const;
     const char* at(const unsigned int& index);
+    unsigned int namedCount();
+    unsigned int standaloneCount();
 public:
     const argument& operator [](const char* name);
     const char*     operator [](const unsigned int& index);
