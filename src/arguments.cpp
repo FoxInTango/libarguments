@@ -22,7 +22,7 @@
  * IN THE SOFTWARE.
  */
 
-#include "../include/arguments.h"
+#include "arguments.h"
 using namespace foxintango;
 #include <string.h>
 #include <string>
