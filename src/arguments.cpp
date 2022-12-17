@@ -40,7 +40,6 @@ public:
 
     }
     ~argumentIMPL() {
-
     }
 };
 
@@ -91,7 +90,7 @@ arguments::arguments(const int& count,char** content) {
     if(this->impl && count && content) {
         int i = 0;// 参数偏移量
         int o = 1;// 参数值偏移量
-
+        
         while(i < count) {
             char* param = content[i];
             if('-' == param[0] && strlen(param) > 1) break;
