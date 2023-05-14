@@ -51,7 +51,7 @@ TARGET_OBJECTS_PP  += $(patsubst %.cpp,%.o,$(TARGET_SOURCES_PP))
 TARGET_HEADER_DIRS += $(foreach dir,$(PROJECT_DIRS),-I$(dir))                         # $(wildcard $(TARGET_HEADERS_DIR)/*.h)
 
 # 需要链接的库
-TARGET_LIBS = -lstdc++
+TARGET_LIBS = -lmodel -lstdc++
 # 链接标志
 
 ASFLAGS =
@@ -65,6 +65,9 @@ ifdef SUPER_INCLUDE_PATH
 endif
 ifdef SUPER_LIBRARY_PATH
     LDFLAGS += -L${SUPER_LIBRARY_PATH}
+endif
+ifdef SUPER_RUNTIME_PATH
+    LDFLAGS += -Wl,-rpath=${SUPER_RUNTIME_PATH}/lib
 endif
 # 平台检测 -- DARWIN
 ifeq (${PLATFORM_ARCH},${PLATFORM_ARCH_DARWIN})
@@ -104,7 +107,7 @@ ${TARGET_LIB_DIR}/${TARGET_NAME}.${TARGET_LIB_EXT_STATIC}:$(TARGET_OBJECTS_PP) $
 	$(AR) -crvs $@ $^
 
 ${TARGET_LIB_DIR}/${TARGET_NAME}.${TARGET_LIB_EXT_DYNAMIC}:$(TARGET_OBJECTS_PP) $(TARGET_OBJECTS_CC) $(TARGET_OBJECTS_AS)
-	$(CC) -fPIC -shared $(TARGET_LIBS) -o $@ $^ ${LDFLAGS}
+	$(CC) -fPIC -shared  -o $@ $^ ${LDFLAGS} $(TARGET_LIBS)
 
 $(TARGET_OBJECTS_AS):%.o:%.s
 	$(AS) ${ASFLAGS} $< -o $@

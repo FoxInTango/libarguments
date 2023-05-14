@@ -37,7 +37,6 @@ public:
     std::vector<std::string> values;
 public:
     argumentIMPL() {
-
     }
     ~argumentIMPL() {
     }
