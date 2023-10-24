@@ -85,7 +85,7 @@ public:
     ~argumentsIMPL() {}
 };
 arguments::arguments(const int& count,char** content) {
-    return 0;
+    return;
     this->impl = new argumentsIMPL();
     if(this->impl && count && content) {
         int i = 0;// 参数偏移量
