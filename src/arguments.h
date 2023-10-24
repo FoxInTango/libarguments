@@ -29,7 +29,7 @@
 EXTERN_C_BEGIN
 namespace foxintango {
 class argumentIMPL;
-class foxintangoAPI argument{// : public ME{
+class foxintangoAPI argument :public ME{
 public:
     argumentIMPL* impl;
 public:
@@ -46,7 +46,7 @@ public:
     const char* operator [](const unsigned int& index);
 };
 class argumentsIMPL;
-class foxintangoAPI arguments : public ME {
+class foxintangoAPI arguments {// : public ME {
 public:
     argumentsIMPL* impl;
 public:
