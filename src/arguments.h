@@ -29,7 +29,7 @@
 EXTERN_C_BEGIN
 namespace foxintango {
 class argumentIMPL;
-class foxintangoAPI argument : public ME{
+class foxintangoAPI argument{// : public ME{
 public:
     argumentIMPL* impl;
 public:
