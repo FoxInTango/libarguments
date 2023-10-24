@@ -100,14 +100,14 @@ arguments::arguments(const int& count,char** content) {
 
         while(i < count) {
             char* param = content[i];
-            //std::cout << "parse i : " << i << std::endl;
+            std::cout << "parse i : " << i << std::endl;
             if('-' == param[0] && strlen(param) > 1) {
                 argument arg;
                 arg.impl->name += &param[1];
                 o = 1;
                 while(i + o < count) {
                     param = content[i + o];
-                    //std::cout << "parse o : " << o << std::endl;
+                    std::cout << "parse o : " << o << std::endl;
                     if('-' == param[0]) {
                         break;
                     } else {
