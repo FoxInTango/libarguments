@@ -46,7 +46,7 @@ public:
     const char* operator [](const unsigned int& index);
 };
 class argumentsIMPL;
-class foxintangoAPI arguments {// : public ME {
+class foxintangoAPI arguments :public ME {
 public:
     argumentsIMPL* impl;
 public:
