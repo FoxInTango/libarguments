@@ -85,7 +85,6 @@ public:
     ~argumentsIMPL() {}
 };
 arguments::arguments(const int& count,char** content) {
-    /*
     this->impl = new argumentsIMPL();
     if(this->impl && count && content) {
         int i = 0;// 参数偏移量
@@ -122,10 +121,10 @@ arguments::arguments(const int& count,char** content) {
             i += o;
             o  = 1;
         }
-    }*/
+    }
 }
 
-arguments::~arguments() { /*if(this->impl) delete this->impl;*/ }
+arguments::~arguments() { if(this->impl) delete this->impl; }
 
 argument INSTANCE_ARGUMENT_EMPTY_DEFAULT;
 
