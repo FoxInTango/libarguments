@@ -217,9 +217,9 @@ uninstall :
 	rm -rf $(BINARY_INSTALL_PATH)/$(TARGET_NAME)
 	rm -rf $(LIBRARY_INSTALL_PATH)/$(TARGET_NAME).*
 publish:
-	git add . && git commit -m "$(shell date)" && git push
+	-git add . && git commit -m "$(shell date)" && git push
 update:
-	git pull
+	-git pull
 echo:
 	@echo TARGET_NAME:$(TARGET_NAME)
 	@echo HEADER_INSTALL_PATH:$(HEADER_INSTALL_PATH)
