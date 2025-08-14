@@ -1,0 +1,25 @@
+PREPARE_TARGETS += preapre.libcpp
+PREPARE_TARGETS += preapre.libstring
+PREPARE_TARGETS += preapre.libmodel
+
+## libcpp
+PREPARE_LIBCPP_URL = wf@allinone.io:alpine/libcpp.git
+PREPARE_LIBCPP_DIR = $(DEPENDS_LIBRARY_PATH)/$(basename $(notdir $(PREPARE_LIBCPP_URL)))
+preapre.libcpp:
+	-git clone $(PREPARE_LIBCPP_URL) $(PREPARE_LIBCPP_DIR)
+	-cd $(PREPARE_LIBCPP_DIR) && $(MAKE) prepare
+
+##libstring
+PREPARE_LIBSTRING_URL = wf@allinone.io:alpine/libstring.git
+PREPARE_LIBSTRING_DIR = $(DEPENDS_LIBRARY_PATH)/$(basename $(notdir $(PREPARE_LIBSTRING_URL)))
+preapre.libstring:
+	-git clone $(PREPARE_LIBSTRING_URL) $(PREPARE_LIBSTRING_DIR)
+	-cd $(PREPARE_LIBSTRING_DIR) && $(MAKE) prepare
+
+##libmodel
+PREPARE_LIBMODEL_URL = wf@allinone.io:alpine/libmodel.git
+PREPARE_LIBMODEL_DIR = $(DEPENDS_LIBRARY_PATH)/$(basename $(notdir $(PREPARE_LIBMODEL_URL)))
+preapre.libmodel:
+	-git clone $(PREPARE_LIBMODEL_URL) $(PREPARE_LIBMODEL_DIR)
+	-cd $(PREPARE_LIBMODEL_DIR) && $(MAKE) prepare
+
