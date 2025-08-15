@@ -186,8 +186,8 @@ ifdef SUPER_MAKE_CONFIG_DIR
 	-rm $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "DEPEND_TARGETS += libarguments.build"                                        >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.build:"                                                         >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}               >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE)"                                             >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 endif
@@ -198,45 +198,45 @@ endif
 	@echo "UPDATE_TARGETS  += libarguments.update"     >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "PUBLISH_TARGETS += libarguments.publish"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments:"                              >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE)"            >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.clean:"                        >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) clean"      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.prepare:"                      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) prepare"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.install:"                      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) install"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.uninstall:"                    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) uninstall"  >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.publish:"                      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) publish"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.update:"                       >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) update"     >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "libarguments.echo:"                         >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${SUPER_MAKE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${SUPER_MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) echo"       >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 endif
 ifndef ROOT_MAKE_CONFIG_DIR
 	echo "no ROOT_MAKE_CONFIG_DIR found."
