@@ -1,9 +1,11 @@
+.DEFAULT_GOAL := ALL
 MAKE_FILE_PATH := $(abspath $(lastword $(MAKEFILE_LIST)))
 MAKE_FILE_DIR  := $(dir $(MAKE_FILE_PATH))
 MAKE_CONFIG_DIR           = $(MAKE_FILE_DIR).make
 PROJECT_MODULE_MAKEFILES += $(wildcard $(MAKE_CONFIG_DIR)/*.mk)
 include $(PROJECT_MODULE_MAKEFILES)
 include $(MAKE_CONFIG_DIR)/name
+include $(MAKE_CONFIG_DIR)/super
 
 CC=g++
 PP=gcc
@@ -36,8 +38,6 @@ PPFLAGS += -c -fPIC -Wall -std=c++11 -fvisibility=hidden
 #LDFLAGS =
 
 # Path Configurations
-DEFAULT_INSTALL_PATH_PREFIX = /usr/local
-
 HEADER_INSTALL_PATH  = ${MAKE_FILE_DIR}inc
 BINARY_INSTALL_PATH  = ${MAKE_FILE_DIR}bin
 LIBRARY_INSTALL_PATH = ${MAKE_FILE_DIR}lib
@@ -45,57 +45,57 @@ DEPENDS_LIBRARY_PATH = ${MAKE_FILE_DIR}libraries
 DEPENDS_THIRDS_PATH  = ${MAKE_FILE_DIR}thirds
 
 # Path where headers to be installed.
-ifdef SUPER_HEADER_INSTALL_PATH
-HEADER_INSTALL_PATH = ${SUPER_HEADER_INSTALL_PATH}
+ifdef ROOT_HEADER_INSTALL_PATH
+HEADER_INSTALL_PATH = ${ROOT_HEADER_INSTALL_PATH}
 endif
 
 # Path where outputed binary to be installed.
-ifdef SUPER_BINARY_INSTALL_PATH
-    BINARY_INSTALL_PATH  = ${SUPER_BINARY_INSTALL_PATH}
+ifdef ROOT_BINARY_INSTALL_PATH
+    BINARY_INSTALL_PATH  = ${ROOT_BINARY_INSTALL_PATH}
 endif
 
 # Path where outputed library to be installed.
-ifdef SUPER_LIBRARY_INSTALL_PATH
-    LIBRARY_INSTALL_PATH  = ${SUPER_LIBRARY_INSTALL_PATH}
+ifdef ROOT_LIBRARY_INSTALL_PATH
+    LIBRARY_INSTALL_PATH  = ${ROOT_LIBRARY_INSTALL_PATH}
 endif
 
 # Path where libraries depended by this project to be downloaded.
-ifdef SUPER_DEPENDS_LIBRARY_PATH
-    DEPENDS_LIBRARY_PATH  = ${SUPER_DEPENDS_LIBRARY_PATH}
+ifdef ROOT_DEPENDS_LIBRARY_PATH
+    DEPENDS_LIBRARY_PATH  = ${ROOT_DEPENDS_LIBRARY_PATH}
 endif
 
 # Path where third-parties depended by this project to be downloaded.
-ifdef SUPER_DEPENDS_THIRDS_PATH
-    DEPENDS_THIRDS_PATH  = ${SUPER_DEPENDS_THIRDS_PATH}
+ifdef ROOT_DEPENDS_THIRDS_PATH
+    DEPENDS_THIRDS_PATH  = ${ROOT_DEPENDS_THIRDS_PATH}
 endif
 
-ifndef SUPER_HEADER_INSTALL_PATH
-export SUPER_HEADER_INSTALL_PATH  = ${HEADER_INSTALL_PATH}
+ifndef ROOT_HEADER_INSTALL_PATH
+export ROOT_HEADER_INSTALL_PATH  = ${HEADER_INSTALL_PATH}
 endif
-ifndef SUPER_BINARY_INSTALL_PATH
-export SUPER_BINARY_INSTALL_PATH  = ${BINARY_INSTALL_PATH}
+ifndef ROOT_BINARY_INSTALL_PATH
+export ROOT_BINARY_INSTALL_PATH  = ${BINARY_INSTALL_PATH}
 endif
-ifndef SUPER_LIBRARY_INSTALL_PATH
-export SUPER_LIBRARY_INSTALL_PATH = ${LIBRARY_INSTALL_PATH}
+ifndef ROOT_LIBRARY_INSTALL_PATH
+export ROOT_LIBRARY_INSTALL_PATH = ${LIBRARY_INSTALL_PATH}
 endif
-ifndef SUPER_DEPENDS_LIBRARY_PATH
-export SUPER_DEPENDS_LIBRARY_PATH = ${DEPENDS_LIBRARY_PATH}
+ifndef ROOT_DEPENDS_LIBRARY_PATH
+export ROOT_DEPENDS_LIBRARY_PATH = ${DEPENDS_LIBRARY_PATH}
 endif
-ifndef SUPER_DEPENDS_THIRDS_PATH
-export SUPER_DEPENDS_THIRDS_PATH  = ${DEPENDS_THIRDS_PATH}
+ifndef ROOT_DEPENDS_THIRDS_PATH
+export ROOT_DEPENDS_THIRDS_PATH  = ${DEPENDS_THIRDS_PATH}
 endif
 
 include $(MAKE_CONFIG_DIR)/prepare
 
-ifdef SUPER_INCLUDE_PATH
-    CCFLAGS += -I${SUPER_INCLUDE_PATH}
-	PPFLAGS += -I${SUPER_INCLUDE_PATH}
+ifdef ROOT_INCLUDE_PATH
+    CCFLAGS += -I${ROOT_INCLUDE_PATH}
+	PPFLAGS += -I${ROOT_INCLUDE_PATH}
 endif
-ifdef SUPER_LIBRARY_PATH
-    LDFLAGS += -L${SUPER_LIBRARY_PATH}
+ifdef ROOT_LIBRARY_PATH
+    LDFLAGS += -L${ROOT_LIBRARY_PATH}
 endif
-ifdef SUPER_RUNTIME_PATH
-    LDFLAGS += -Wl,-rpath=${SUPER_RUNTIME_PATH}
+ifdef ROOT_RUNTIME_PATH
+    LDFLAGS += -Wl,-rpath=${ROOT_RUNTIME_PATH}
 endif
 
 TARGET_BIN_DIR := ./bin
@@ -146,8 +146,7 @@ ifeq (${PLATFORM_ARCH},${PLATFORM_ARCH_FreeBSD})
     TARGET_LIB_EXT_DYNAMIC := so
 endif
 
-TARGETS = 
-
+TARGETS += 
 ifeq ($(TARGET_TYPE_LIB),$(MK_TRUE))
 TARGETS += ${TARGET_LIB_DIR}/${TARGET_NAME}.${TARGET_LIB_EXT_STATIC}
 endif
@@ -158,13 +157,16 @@ ifeq ($(TARGET_TYPE_BIN),$(MK_TRUE))
 TARGETS += ${TARGET_BIN_DIR}/${TARGET_NAME}
 endif
 
-ALL : $(TARGETS)
-
+ALL : $(DEPEND_TARGETS) $(TARGETS)
+	
 ${TARGET_LIB_DIR}/${TARGET_NAME}.${TARGET_LIB_EXT_STATIC}:$(TARGET_OBJECTS_PP) $(TARGET_OBJECTS_CC) $(TARGET_OBJECTS_AS)
 	$(AR) -crvs $@ $^
 
 ${TARGET_LIB_DIR}/${TARGET_NAME}.${TARGET_LIB_EXT_DYNAMIC}:$(TARGET_OBJECTS_PP) $(TARGET_OBJECTS_CC) $(TARGET_OBJECTS_AS)
 	$(CC) -fPIC -shared  -o $@ $^ ${LDFLAGS} $(TARGET_LIBS)
+
+${TARGET_BIN_DIR}/${TARGET_NAME}: $(TARGET_OBJECTS_PP) $(TARGET_OBJECTS_CC) $(TARGET_OBJECTS_AS)
+	$(PP) -o $@ $^  $(TARGET_LIBS) ${TARGET_LD_FLAGS} -fPIE #-static
 
 $(TARGET_OBJECTS_AS):%.o:%.s
 	$(AS) ${ASFLAGS} $< -o $@
@@ -182,27 +184,62 @@ clean   :
 prepare:$(PREPARE_TARGETS)
 ifdef SUPER_MAKE_CONFIG_DIR
 	-rm $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "PUBLISH_TARGETS += libarguments.publish"    >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "UPDATE_TARGETS  += libarguments.update"     >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments:"                              >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE)"            >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments.clean:"                        >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) clean"      >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments.prepare:"                      >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) prepare"    >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments.install:"                      >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) install"    >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments.uninstall:"                    >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) uninstall"  >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments.publish:"                      >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) publish"    >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments.update:"                       >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) update"     >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "libarguments.echo:"                         >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
-	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) echo"       >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "DEPEND_TARGETS += libarguments.build"                                        >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.build:"                                                         >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE)"                                             >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
 endif
-ifndef SUPER_MAKE_CONFIG_DIR
-	echo "no SUPER_MAKE_CONFIG_DIR found."
+ifdef ROOT_MAKE_CONFIG_DIR
+ifneq (${SUPER_MAKE_CONFIG_DIR},${ROOT_MAKE_CONFIG_DIR})
+	-rm $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+endif
+	@echo "UPDATE_TARGETS  += libarguments.update"     >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "PUBLISH_TARGETS += libarguments.publish"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments:"                              >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE)"            >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.clean:"                        >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) clean"      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.prepare:"                      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) prepare"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.install:"                      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) install"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.uninstall:"                    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) uninstall"  >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.publish:"                      >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) publish"    >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.update:"                       >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) update"     >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "libarguments.echo:"                         >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_DIR=${MAKE_FILE_DIR}          >> ${MAKE_CONFIG_DIR}/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	@echo SUPER_MAKE_CONFIG_DIR=${MAKE_CONFIG_DIR} >> $(MAKE_CONFIG_DIR)/super" >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	cd $(MAKE_FILE_DIR) && $(MAKE) echo"       >> $(ROOT_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+	@echo "	-rm $(MAKE_CONFIG_DIR)/super"                                               >> $(SUPER_MAKE_CONFIG_DIR)/$(TARGET_NAME).mk
+endif
+ifndef ROOT_MAKE_CONFIG_DIR
+	echo "no ROOT_MAKE_CONFIG_DIR found."
 endif
 install :
 	rm -rf $(HEADER_INSTALL_PATH)/$(TARGET_NAME)
@@ -227,3 +264,7 @@ echo:
 	@echo LIBRARY_INSTALL_PATH:$(LIBRARY_INSTALL_PATH)
 	@echo DEPENDS_LIBRARY_PATH:$(DEPENDS_LIBRARY_PATH)
 	@echo DEPENDS_THIRDS_PATH:$(DEPENDS_THIRDS_PATH)
+	@echo LOCAL_SUPER_MAKE_DIR:$(LOCAL_SUPER_MAKE_DIR)
+	@echo SUPER_MAKE_DIR:$(SUPER_MAKE_DIR)
+	@echo LOCAL_SUPER_MAKE_CONFIG_DIR:$(LOCAL_SUPER_MAKE_CONFIG_DIR)
+	@echo SUPER_MAKE_CONFIG_DIR:$(SUPER_MAKE_CONFIG_DIR)
