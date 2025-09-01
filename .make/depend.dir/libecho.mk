@@ -1,9 +1,9 @@
-DEPEND_TARGETS += libecho.build
+DEPEND_TARGETS += libecho.recursive
 ECHO_TARGETS += libecho.echo
-libecho.build:
+libecho.recursive:
 	@echo SUPER_MAKE_DIR=/mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libarguments/               >> /mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libecho/.make/super
 	@echo SUPER_MAKE_CONFIG_DIR=/mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libarguments/.make >> /mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libecho/.make/super
-	cd /mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libecho/ && make && make install
+	cd /mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libecho/ && make recursive && make install
 	-rm /mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libecho/.make/super
 libecho.echo:
 	@echo SUPER_MAKE_DIR=/mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libarguments/               >> /mnt/d/CORE_WEB_SYSTEM_WEB/alpine/libraries/libecho/.make/super
