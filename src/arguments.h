@@ -24,12 +24,12 @@
 #ifndef _ARGUMENTS_H_
 #define _ARGUMENTS_H_
 #include <libcpp/libcpp.h>
-#include <libmodel/libmodel.h>
+//#include <libmodel/libmodel.h>
 
 EXTERN_C_BEGIN
 namespace foxintango {
 class argumentIMPL;
-class foxintangoAPI argument :public ME{
+class foxintangoAPI argument{
 public:
     argumentIMPL* impl;
 public:
@@ -46,7 +46,7 @@ public:
     const char* operator [](const unsigned int& index);
 };
 class argumentsIMPL;
-class foxintangoAPI arguments :public ME {
+class foxintangoAPI arguments{
 public:
     argumentsIMPL* impl;
 public:
