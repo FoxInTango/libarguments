@@ -1,12 +1,12 @@
 DEPEND_TARGETS += libstring.recursive
 ECHO_TARGETS += libstring.echo
 libstring.recursive:
-	@echo SUPER_MAKE_DIR=/volumes/llama/home/alpine/libraries/libarguments/               >> /volumes/llama/home/alpine/libraries/libstring/.make/super
-	@echo SUPER_MAKE_CONFIG_DIR=/volumes/llama/home/alpine/libraries/libarguments/.make >> /volumes/llama/home/alpine/libraries/libstring/.make/super
-	cd /volumes/llama/home/alpine/libraries/libstring/ && make recursive && make install
-	-rm /volumes/llama/home/alpine/libraries/libstring/.make/super
+	@echo SUPER_MAKE_DIR=/Users/lidali/alpine/libraries/libarguments/               >> /Users/lidali/alpine/libraries/libstring/.make/super
+	@echo SUPER_MAKE_CONFIG_DIR=/Users/lidali/alpine/libraries/libarguments/.make >> /Users/lidali/alpine/libraries/libstring/.make/super
+	cd /Users/lidali/alpine/libraries/libstring/ && /Applications/Xcode.app/Contents/Developer/usr/bin/make recursive && /Applications/Xcode.app/Contents/Developer/usr/bin/make install
+	-rm /Users/lidali/alpine/libraries/libstring/.make/super
 libstring.echo:
-	@echo SUPER_MAKE_DIR=/volumes/llama/home/alpine/libraries/libarguments/               >> /volumes/llama/home/alpine/libraries/libstring/.make/super
-	@echo SUPER_MAKE_CONFIG_DIR=/volumes/llama/home/alpine/libraries/libarguments/.make >> /volumes/llama/home/alpine/libraries/libstring/.make/super
-	cd /volumes/llama/home/alpine/libraries/libstring/ && make echo
-	-rm /volumes/llama/home/alpine/libraries/libstring/.make/super
+	@echo SUPER_MAKE_DIR=/Users/lidali/alpine/libraries/libarguments/               >> /Users/lidali/alpine/libraries/libstring/.make/super
+	@echo SUPER_MAKE_CONFIG_DIR=/Users/lidali/alpine/libraries/libarguments/.make >> /Users/lidali/alpine/libraries/libstring/.make/super
+	cd /Users/lidali/alpine/libraries/libstring/ && /Applications/Xcode.app/Contents/Developer/usr/bin/make echo
+	-rm /Users/lidali/alpine/libraries/libstring/.make/super
